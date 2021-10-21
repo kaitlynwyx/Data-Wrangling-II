@@ -1,0 +1,81 @@
+---
+title: "reading_from_web"
+author: "Kaitlyn Wang"
+date: "10/19/2021"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(rvest)
+library(httr)
+```
+
+
+#NSDUH data
+```{r}
+url = "http://samhda.s3-us-gov-west-1.amazonaws.com/s3fs-public/field-uploads/2k15StateFiles/NSDUHsaeShortTermCHG2015.htm"
+
+drug_use_html = read_html(url)
+
+drug_use_html %>% 
+  html_table() %>% 
+  first() %>% 
+  slice(-1)
+
+```
+
+## Star Wars
+
+Get some star wars data
+
+```{r}
+sw_url = "https://www.imdb.com/list/ls070150896/"
+
+sw_html = 
+  read_html(sw_url)
+
+sw_title = 
+  sw_html %>% 
+  html_elements(".lister-item-header a") %>%
+  html_text()
+
+sw_revenue = 
+  sw_html %>%
+  html_elements(".text-small:nth-child(7) span:nth-child(5)") %>%
+  html_text()
+
+sw_runtime = 
+  sw_html %>%
+  html_elements(".runtime") %>%
+  html_text()
+  
+sw_df = 
+  tibble(
+    title = sw_title,
+    rev = sw_revenue,
+    runt = sw_runtime
+  )
+```
+
+
+# Try some APIs
+
+Get some data from an API about water
+
+```{r}
+water_df = 
+  GET("https://data.cityofnewyork.us/resource/ia2d-e54m.json") %>% 
+  content("text") %>% 
+  jsonlite::fromJSON() %>% 
+  as_tibble()
+```
+
+```{r}
+brfss_df = 
+  GET("https://chronicdata.cdc.gov/resource/acme-vg9e.csv",
+    query = list("$limit" = 5000)) %>% 
+  content()
+  
+```
+
