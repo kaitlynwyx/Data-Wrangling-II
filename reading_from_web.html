@@ -215,7 +215,7 @@ sw_html =
 
 sw_title = 
   sw_html %&gt;% 
-  html_elements(&quot;.lister-item-header a&quot;) %&gt;%
+  html_nodes(css = &quot;.lister-item-header a&quot;) %&gt;%
   html_text()
 
 sw_revenue = 

@@ -44,7 +44,7 @@ sw_html =
 
 sw_title = 
   sw_html %>% 
-  html_elements(".lister-item-header a") %>%
+  html_nodes(css = ".lister-item-header a") %>%
   html_text()
 
 sw_revenue = 
